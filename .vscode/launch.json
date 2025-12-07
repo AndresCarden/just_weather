@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "JustWeather DEV",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=WEATHER_API_BASE=https://api.weatherapi.com",
+                "--dart-define=WEATHER_API_KEY=e66fe3d7d9e4454b84f10232250612"
+            ]
+        },
+        {
+            "name": "JustWeather PROD",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=WEATHER_API_BASE=https://prod.weatherapi.com",
+                "--dart-define=WEATHER_API_KEY=e66fe3d7d9e4454b84f10232250612"
+            ]
+        }
+    ]
+}
