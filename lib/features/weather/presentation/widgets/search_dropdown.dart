@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:just_weather/core/theme/app_text_styles.dart';
 import 'package:just_weather/features/weather/application/search_controller.dart';
@@ -23,7 +24,6 @@ class SearchDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final isFocused = focusNode.hasFocus;
     final hasQuery = searchState.query.trim().isNotEmpty;
-
     if (!isFocused) return const SizedBox.shrink();
 
     if (hasQuery) {
@@ -51,84 +51,117 @@ class SearchDropdown extends StatelessWidget {
         );
       }
 
-      return Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: ListView.separated(
-          shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: searchState.results.length,
-          separatorBuilder: (_, __) => const Divider(height: 1),
-          itemBuilder: (context, index) {
-            final loc = searchState.results[index];
-            return ListTile(
-              dense: true,
-              title: Text(
-                '${loc.name}, ${loc.country}',
-                style: AppTextStyles.body,
-              ),
-              onTap: () => onSelectLocation(loc),
-            );
-          },
-        ),
-      );
-    }
-
-    if (searchState.recent.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Row(
-              children: [
-                const Text('Búsquedas recientes', style: AppTextStyles.body3),
-                const Spacer(),
-                TextButton(
-                  onPressed: onClearAll,
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(0, 0),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    foregroundColor: Colors.indigo.shade400,
-                  ),
-                  child: Text(
-                    'Borrar todo',
-                    style: AppTextStyles.body2.copyWith(
-                      color: Colors.indigo.shade400,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      return Align(
+        alignment: Alignment.topLeft,
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          const Divider(height: 1),
-          ListView.separated(
+          child: ListView.separated(
             shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            itemCount: searchState.recent.length,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            itemCount: searchState.results.length,
             separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (context, index) {
-              final loc = searchState.recent[index];
-              return ListTile(
-                dense: true,
-                title: Text('${loc.name}, ${loc.country}'),
-                onTap: () => onSelectLocation(loc),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 18),
-                  color: Colors.grey[600],
-                  onPressed: () => onDeleteRecent(loc),
+              final loc = searchState.results[index];
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: kIsWeb
+                    ? (_) {
+                        onSelectLocation(loc);
+                      }
+                    : null,
+
+                onTap: kIsWeb
+                    ? null
+                    : () {
+                        onSelectLocation(loc);
+                      },
+
+                child: ListTile(
+                  dense: true,
+                  title: Text(
+                    '${loc.name}, ${loc.country}',
+                    style: AppTextStyles.body,
+                  ),
                 ),
               );
             },
           ),
-        ],
+        ),
+      );
+    }
+    if (searchState.recent.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Row(
+                children: [
+                  const Text('Búsquedas recientes', style: AppTextStyles.body3),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: onClearAll,
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      foregroundColor: Colors.indigo.shade400,
+                    ),
+                    child: Text(
+                      'Borrar todo',
+                      style: AppTextStyles.body2.copyWith(
+                        color: Colors.indigo.shade400,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              itemCount: searchState.recent.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final loc = searchState.recent[index];
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTapDown: kIsWeb
+                      ? (_) {
+                          onSelectLocation(loc);
+                        }
+                      : null,
+                  onTap: kIsWeb
+                      ? null
+                      : () {
+                          onSelectLocation(loc);
+                        },
+                  child: ListTile(
+                    dense: true,
+                    title: Text('${loc.name}, ${loc.country}'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete_outline, size: 18),
+                      color: Colors.grey[600],
+                      onPressed: () => onDeleteRecent(loc),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
