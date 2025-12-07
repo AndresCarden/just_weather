@@ -188,8 +188,8 @@ O desde **VS Code** usando la config `JustWeather DEV` del `launch.json`.
 
 Diseñado para:
 
-📱 Mobile: 360px, 390px  
-💊 Tablet: 768px, 810px
+Mobile: 360px, 390px  
+Tablet: 768px, 810px
 
 ---
 
@@ -216,26 +216,6 @@ Generar build:
 ```bash
 flutter build web --release
 ```
-
-Subir a:
-
-- GitHub Pages
-- Netlify
-- Appetize.io
-
----
-
-## 📤 Entrega
-
-Enviar:
-
-✔️ Link del repositorio (GitHub)  
-✔️ Link demo web (Appetize)  
-
-Enviar a:
-
-📩 mariana.betancur@f2x.com.co
-
 ---
 
 ## 👨‍💻 Autor
