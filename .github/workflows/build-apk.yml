@@ -2,9 +2,9 @@ name: Build APK (Just Weather)
 
 on:
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "master", "main", "develop" ]
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "master", "main", "develop" ]
   workflow_dispatch:
 
 jobs:
