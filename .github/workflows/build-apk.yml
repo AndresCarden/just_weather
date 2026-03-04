@@ -1,0 +1,49 @@
+name: Build APK (Just Weather)
+
+on:
+  pull_request:
+    branches: [ "main", "develop" ]
+  push:
+    branches: [ "main", "develop" ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build APK (debug)
+        env:
+          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+          WEATHER_API_BASE: ${{ secrets.WEATHER_API_BASE }}
+        run: |
+          flutter build apk --debug \
+            --dart-define=WEATHER_API_KEY=$WEATHER_API_KEY \
+            --dart-define=WEATHER_API_BASE=$WEATHER_API_BASE
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: just-weather-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
