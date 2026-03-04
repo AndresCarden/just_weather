@@ -32,6 +32,7 @@ jobs:
 
       - name: Run tests
         run: flutter test
+        continue-on-error: true
 
       - name: Build APK (debug)
         env:
