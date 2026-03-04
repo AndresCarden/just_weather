@@ -30,8 +30,19 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test || true
+      - name: Run tests (verbose, do not fail job)
+        shell: bash
+        run: |
+          set +e
+          flutter test --reporter expanded 2>&1 | tee test_output.txt
+          exit 0
+
+      - name: Upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log
+          path: test_output.txt
 
       - name: Build APK (debug)
         env:
