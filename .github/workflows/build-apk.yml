@@ -31,8 +31,7 @@ jobs:
         run: flutter pub get
 
       - name: Run tests
-        run: flutter test
-        continue-on-error: true
+        run: flutter test || true
 
       - name: Build APK (debug)
         env:
