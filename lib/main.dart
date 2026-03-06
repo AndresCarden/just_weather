@@ -10,6 +10,7 @@ void main() {
 class JustWeatherApp extends ConsumerWidget {
   const JustWeatherApp({super.key});
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
